@@ -24,7 +24,7 @@ fi
 
 depend()
 {
-	local IFACE=${RC_SVCNAME#*.}
+	local IFACE=$(get_interface)
 	local IFVAR=$(shell_var "${IFACE}")
 
 	need localmount
@@ -531,7 +531,7 @@ interface_down()
 
 start()
 {
-	local IFACE=${RC_SVCNAME#*.} oneworked=false fallback=false module=
+	local IFACE=$(get_interface) oneworked=false fallback=false module=
 	local IFVAR=$(shell_var "${IFACE}") cmd= our_metric=
 	local metric=0 _up_before_preup
 	eval _up_before_preup="\$up_before_preup_${IFVAR}"
@@ -726,7 +726,7 @@ stop()
 	# correctly if we go back to multiuser.
 	yesno ${keep_network:-YES} && yesno $RC_GOINGDOWN && return 0
 
-	local IFACE=${RC_SVCNAME#*.} module=
+	local IFACE=$(get_interface) module=
 	local IFVAR=$(shell_var "${IFACE}") opts=
 
 	einfo "Bringing down interface ${IFACE}"
