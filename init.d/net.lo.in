@@ -2,6 +2,7 @@
 # Copyright (c) 2007-2009 Roy Marples <roy@marples.name>
 # Released under the 2-clause BSD license.
 
+SHDIR="@LIBEXECDIR@/sh"
 MODULESDIR="@LIBEXECDIR@/net"
 MODULESLIST="${RC_SVCDIR}/nettree"
 _config_vars="config routes"
@@ -13,6 +14,14 @@ description="Configures network interfaces."
 # Handy var so we don't have to embed new lines everywhere for array splitting
 __IFS="
 "
+
+if [ -f "$SHDIR/functions.sh" ]; then
+	. "$SHDIR/functions.sh"
+else
+	echo "$SHDIR/functions.sh missing. Exiting"
+	exit -1
+fi
+
 depend()
 {
 	local IFACE=${RC_SVCNAME#*.}
