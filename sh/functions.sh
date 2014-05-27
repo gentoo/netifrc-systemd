@@ -95,10 +95,6 @@ else
 			printf " ${WARN}*${NORMAL} ${RC_INDENTATION}$*"
 		fi
 	
-		local name="${0##*/}"
-		# Log warnings to system log
-		esyslog "daemon.warning" "${name}" "$*"
-	
 		LAST_E_CMD="ewarnn"
 		return 0
 	}
@@ -114,10 +110,6 @@ else
 			fi
 			printf " ${WARN}*${NORMAL} ${RC_INDENTATION}$*\n"
 		fi
-	
-		local name="${0##*/}"
-		# Log warnings to system log
-		esyslog "daemon.warning" "${name}" "$*"
 	
 		LAST_E_CMD="ewarn"
 		return 0
@@ -135,10 +127,6 @@ else
 			printf " ${BAD}*${NORMAL} ${RC_INDENTATION}$*"
 		fi
 	
-		local name="${0##*/}"
-		# Log errors to system log
-		esyslog "daemon.err" "rc-scripts" "$*"
-	
 		LAST_E_CMD="eerrorn"
 		return 0
 	}
@@ -154,10 +142,6 @@ else
 			fi
 			printf " ${BAD}*${NORMAL} ${RC_INDENTATION}$*\n"
 		fi
-	
-		local name="${0##*/}"
-		# Log errors to system log
-		esyslog "daemon.err" "rc-scripts" "$*"
 	
 		LAST_E_CMD="eerror"
 		return 0
