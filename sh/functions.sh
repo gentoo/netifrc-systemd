@@ -354,9 +354,9 @@ fi
 get_interface() {
 	case $INIT in
 		openrc)
-			printf ${RC_SVCNAME#.};;
+			printf ${RC_SVCNAME#*.};;
 		systemd)
-			printf "${RC_IFACE}";;
+			printf ${RC_IFACE};;
 		*)
 			eerror "Init system not supported. Aborting"
 			exit -1;;
