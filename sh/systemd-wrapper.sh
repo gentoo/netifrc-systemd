@@ -2,6 +2,7 @@
 
 CONFDIR="@SYSCONFDIR@"
 LIBEXECDIR="@LIBEXECDIR@/sh"
+INIT=systemd
 
 usage() {
   # TODO Update with options and better description

@@ -15,6 +15,9 @@ description="Configures network interfaces."
 __IFS="
 "
 
+#  Set the INIT to be openrc if this file is called directly
+: ${INIT:=openrc}
+
 if [ -f "$SHDIR/functions.sh" ]; then
 	. "$SHDIR/functions.sh"
 else

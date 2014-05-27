@@ -357,6 +357,9 @@ get_interface() {
 			printf ${RC_SVCNAME#.};;
 		systemd)
 			printf "${RC_IFACE}";;
+		*)
+			eerror "Init system not supported. Aborting"
+			exit -1;;
 	esac
 }
 
