@@ -15,14 +15,25 @@ else
 fi
 
 # runscript functions
-if [[ -n $(command -v service_set_value >/dev/null 2>&1) ]]; then
-	:
-else
+if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
+
 	service_set_value() {
-		:
+		local OPTION="$1" VALUE="$2"
+		if [ -z "$OPTION" -o -z "$VALUE" ]; then
+			eerror "$0 take two options SERVICE and VALUE"
+			return
+		fi
+		local file="$OPTIONSDIR/${OPTION}"
+		echo "$VALUE" > $file
 	}
 	service_get_value() {
-		:
+		local OPTION="$1"
+		if [ -z "$OPTION" ]; then
+			eerror "$0 requires parameter SERVICE"
+			return
+		fi
+		local file="$OPTIONSDIR/${OPTION}"
+		cat $file 2>/dev/null
 	}
 	mark_service_started() {
 		:
