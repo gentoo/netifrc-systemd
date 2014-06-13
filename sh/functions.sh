@@ -2,11 +2,12 @@
 # systems.
 
 # First check whether e* commands are present in the environment
-if ![[ command -v ebegin >/dev/null 2>&1 ]]; then
+# XXX [[-n RC_GOT_FUNCTIONS]] ??
+if [ -n "$(command -v ebegin >/dev/null 2>&1)" ]; then
 	:
 
 # Then check for the presence of functions.sh
-elif [[ -f /lib/gentoo/functions.sh ]]; then
+elif [ -f /lib/gentoo/functions.sh ]; then
 	. /lib/gentoo/functions.sh
 
 else
