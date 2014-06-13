@@ -2,6 +2,7 @@
 
 CONFDIR="@SYSCONFDIR@"
 LIBEXECDIR="@LIBEXECDIR@/sh"
+INITDIR="@INITDIR@"
 INIT=systemd
 
 usage() {
@@ -45,10 +46,10 @@ if [ -f "$CONFDIR/$RC_SVCPREFIX" ]; then
 fi
 
 # Source the actual runscript
-if [ -f "$LIBEXECDIR/$RC_SVCPREFIX" ]; then
-	. "$LIBEXECDIR/$RC_SVCPREFIX"
+if [ -f "$INITDIR/${RC_SVCPREFIX}.lo" ]; then
+	. "$INITDIR/${RC_SVCPREFIX}.lo"
 else
-	echo "$LIBEXECDIR/$RC_SVCPREFIX : Init file missing or invalid path"
+	echo "$INITDIR/${RC_SVCPREFIX}.lo : Init file missing or invalid path"
 	exit -1
 fi
 
