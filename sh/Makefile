@@ -7,13 +7,13 @@ MK=	../mk
 include ${MK}/os.mk
 
 SRCS-FreeBSD=
-BIN-FreeBSD= functions.sh
+BIN-FreeBSD= functions.sh systemd-wrapper.sh
 
 SRCS-Linux=	udhcpc-hook.sh.in
-BIN-Linux=	udhcpc-hook.sh functions.sh
+BIN-Linux=	udhcpc-hook.sh functions.sh systemd-wrapper.sh
 
 SRCS-NetBSD=	ifwatchd-carrier.sh.in ifwatchd-nocarrier.sh.in
-BIN-NetBSD=	ifwatchd-carrier.sh ifwatchd-nocarrier.sh functions.sh
+BIN-NetBSD=	ifwatchd-carrier.sh ifwatchd-nocarrier.sh functions.sh systemd-wrapper.sh
 
 include ${MK}/scripts.mk
 
