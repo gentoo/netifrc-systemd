@@ -30,6 +30,8 @@ done
 : ${RC_SVCPREFIX:="net"}
 RC_SVCNAME="$RC_SVCPREFIX"."$RC_IFACE"
 RC_UNAME=$(uname)
+# XXX Find out the systemd way of doing this
+RC_GOINGDOWN=no
 
 # In Openrc systems this has value /run/openrc
 SVCDIR="/run/netifrc"
@@ -46,7 +48,7 @@ fi
 if [ -f "$LIBEXECDIR/$RC_SVCPREFIX" ]; then
 	. "$LIBEXECDIR/$RC_SVCPREFIX"
 else
-	echo "$INITDIR/$RC_SVCPREFIX : Init file missing or invalid path"
+	echo "$LIBEXECDIR/$RC_SVCPREFIX : Init file missing or invalid path"
 	exit -1
 fi
 
