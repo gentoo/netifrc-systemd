@@ -21,7 +21,7 @@ if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 	service_set_value() {
 		local OPTION="$1" VALUE="$2"
 		if [ -z "$OPTION" -o -z "$VALUE" ]; then
-			eerror "$0 take two options SERVICE and VALUE"
+			eerror "service_set_value take two options KEY and VALUE"
 			return
 		fi
 		local file="$OPTIONSDIR/${OPTION}"
@@ -30,7 +30,7 @@ if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 	service_get_value() {
 		local OPTION="$1"
 		if [ -z "$OPTION" ]; then
-			eerror "$0 requires parameter SERVICE"
+			eerror "service_get_value requires parameter KEY"
 			return
 		fi
 		local file="$OPTIONSDIR/${OPTION}"
@@ -49,9 +49,6 @@ if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 		:
 	}
 	service_inactive() {
-		:
-	}
-	mark_service_stopped() {
 		:
 	}
 fi
