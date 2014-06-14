@@ -18,6 +18,20 @@ fi
 # runscript functions
 if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 
+	# OpenRC functions used in depend
+	after() {
+		:
+	}
+	before() {
+		:
+	}
+	program() {
+		:
+	}
+	need() {
+		:
+	}
+
 	shell_var() {
 		local output=$1 sanitized_arg=
 		shift 1
