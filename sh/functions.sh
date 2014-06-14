@@ -18,6 +18,23 @@ fi
 # runscript functions
 if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 
+	shell_var() {
+		local output=$1 sanitized_arg=
+		shift 1
+		for arg; do
+			sanitized_arg="${arg//[^a-zA-Z0-9_]/_}"
+			output="$output $arg"
+		done
+		echo "$output"
+	}
+
+	#TODO is_net_fs is originally defined at openrc/sh/rc-functions.sh.in
+	# Depends on mountinfo
+	is_net_fs()
+	{
+		return 1
+	}
+
 	service_set_value() {
 		local OPTION="$1" VALUE="$2"
 		if [ -z "$OPTION" -o -z "$VALUE" ]; then
