@@ -37,8 +37,8 @@ if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 
 	service_set_value() {
 		local OPTION="$1" VALUE="$2"
-		if [ -z "$OPTION" -o -z "$VALUE" ]; then
-			eerror "service_set_value take two options KEY and VALUE"
+		if [ -z "$OPTION" ]; then
+			eerror "service_set_value requires parameter KEY"
 			return
 		fi
 		local file="$OPTIONSDIR/${OPTION}"
