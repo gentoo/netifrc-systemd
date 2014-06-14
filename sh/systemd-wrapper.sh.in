@@ -25,6 +25,7 @@ while getopts ":s:i:p:" opt; do
 		RC_SVCPREFIX=$OPTARG;;
   esac
 done
+shift $((OPTIND -1))
 
 [ -z "$RC_IFACE" ] && die "Missing Parameter Interface"
 
