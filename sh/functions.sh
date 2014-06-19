@@ -47,14 +47,11 @@ if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 	{
 		[ -z "$1" ] && return 1
 
-		# Check OS specific flags to see if we're local or net mounted
-		mountinfo --quiet --netdev "$1"  && return 0
-		mountinfo --quiet --nonetdev "$1" && return 1
-
-		# Fall back on fs types
-		local t=$(mountinfo --fstype "$1")
-		for x in $net_fs_list; do
-			[ "$x" = "$t" ] && return 0
+		local fs=$(mount | grep " on $1 " | cut -f 5 -d ' ')
+		for x in $fs; do
+			for y in $net_fs_list; do
+				[ "$x" = "$y" ] && return 0
+			done
 		done
 		return 1
 	}
