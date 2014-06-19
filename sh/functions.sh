@@ -42,10 +42,20 @@ if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 		echo "$output"
 	}
 
-	#TODO is_net_fs is originally defined at openrc/sh/rc-functions.sh.in
-	# Depends on mountinfo
+	net_fs_list="afs ceph cifs coda davfs fuse fuse.sshfs gfs glusterfs lustre ncpfs nfs nfs4 ocfs2 shfs smbfs"
 	is_net_fs()
 	{
+		[ -z "$1" ] && return 1
+
+		# Check OS specific flags to see if we're local or net mounted
+		mountinfo --quiet --netdev "$1"  && return 0
+		mountinfo --quiet --nonetdev "$1" && return 1
+
+		# Fall back on fs types
+		local t=$(mountinfo --fstype "$1")
+		for x in $net_fs_list; do
+			[ "$x" = "$t" ] && return 0
+		done
 		return 1
 	}
 
