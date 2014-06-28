@@ -38,8 +38,9 @@ RC_GOINGDOWN=no
 # In Openrc systems this has value /run/openrc
 SVCDIR="/run/netifrc"
 # OpenRC saves values in $SVCDIR/options/$SVCNAME/$OPTION
-# In non OpenRC setting this is saved in /run/netifrc/options/$OPTION
-OPTIONSDIR="${SVCDIR}/options"
+# In non OpenRC setting this is saved in /run/netifrc/options/$SVCNAME/$OPTION
+OPTIONSDIR="${SVCDIR}/options/${RC_SVCNAME}"
+STATEDIR="${SVCDIR}/${RC_SVCNAME}"
 
 # Source the config file
 if [ -f "$CONFDIR/$RC_SVCPREFIX" ]; then
@@ -56,9 +57,15 @@ fi
 
 netifrc_init() {
 	# Ensure OPTIONSDIR is present and writeable
-	mkdir -p $OPTIONSDIR
-	if [ ! -w $OPTIONSDIR ]; then
+	mkdir -p "$OPTIONSDIR"
+	if [ ! -w "$OPTIONSDIR" ]; then
 		eerror "${OPTIONSDIR} does not exist or is not writeable"
+		exit -1;
+	fi
+	# Ensure STATEDIR is present and writeable
+	mkdir -p "$STATEDIR"
+	if [ ! -w "$STATEDIR" ]; then
+		eerror "${STATEDIR} does not exist or is not writeable"
 		exit -1;
 	fi
 }

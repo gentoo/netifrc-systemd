@@ -74,9 +74,9 @@ if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 		local file="$OPTIONSDIR/${OPTION}"
 		cat $file 2>/dev/null
 	}
-	STATEFILE=${SVCDIR}/state
+	STATEFILE="${STATEDIR}/state"
 	# Internal Function
-	# Stores the state of netifrc in ${SVCDIR}/state file
+	# Stores the state of netifrc in ${SVCDIR}/${SVCNAME}/state file
 	_mark_service() {
 		local state=$1
 		echo $state > $STATEFILE
