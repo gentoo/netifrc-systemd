@@ -68,20 +68,25 @@ netifrc_cleanup() {
 	rm -f ${OPTIONSDIR}/*
 }
 
+rc=0
 case $1 in
 	start)
 		netifrc_init
-		start;;
+		start
+		rc=$?;;
 	stop)
 		stop
-		netifrc_cleanup;;
+		netifrc_cleanup
+		rc=$?;;
 	restart)
 		stop
 		netifrc_cleanup
 		netifrc_init
-		start;;
+		start
+		rc=$?;;
 	*)
 		die "Unrecognised command $1";;
 esac
+exit $rc
 
 # vi: ts=4 sw=4 noexpandtab
