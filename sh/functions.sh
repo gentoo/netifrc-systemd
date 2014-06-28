@@ -74,20 +74,39 @@ if [ -z "$(command -v service_set_value >/dev/null 2>&1)" ]; then
 		local file="$OPTIONSDIR/${OPTION}"
 		cat $file 2>/dev/null
 	}
+	STATEFILE=${SVCDIR}/state
+	# Internal Function
+	# Stores the state of netifrc in ${SVCDIR}/state file
+	_mark_service() {
+		local state=$1
+		echo $state > $STATEFILE
+	}
+	#Internal Function
+	# Checks whether the state of netifrc is same as $1
+	_service_state() {
+		state=$(cat $STATEFILE 2>/dev/null)
+		if [ state = $1 ]; then
+			return 1
+		fi
+		return 0
+	}
+
 	mark_service_started() {
-		:
+		_mark_service started
 	}
 	mark_service_inactive() {
-		:
+		_mark_service inactive
 	}
 	mark_service_stopped() {
-		:
+		_mark_service stopped
 	}
 	service_started() {
-		:
+		_service_state started
+		return $?
 	}
 	service_inactive() {
-		:
+		_service_state inactive
+		return $?
 	}
 fi
 
