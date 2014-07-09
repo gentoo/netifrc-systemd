@@ -1,0 +1,14 @@
+name: Ethernet Test Suite
+description: A battery of tests to check the correction functioning of net.eth0
+net_config: conf.d/net_dhcp
+interface: enp6s0
+backend: default
+tests:
+  - name: Check DHCP
+    command: ifconfig enp6s0
+    keys:
+    - name: status
+      type: boolean
+      value: grep -q UP
+    - name: IP
+      value: "grep 'inet ' |  sed -e 's/^[ \t]*//' | cut -d ' ' -f2"
