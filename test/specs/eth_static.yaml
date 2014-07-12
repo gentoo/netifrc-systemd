@@ -1,6 +1,6 @@
-name: Ethernet Test Suite
-description: A battery of tests to check the correction functioning of net.eth0
-net_config: conf.d/net_dhcp
+name: Static Ethernet Test Suite
+description: A battery of tests to check the correction functioning of static net.eth0
+net_config: conf.d/eth_static
 interface: $$WIRED$$
 tests:
   - name: Check DHCP
