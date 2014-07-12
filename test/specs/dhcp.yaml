@@ -1,11 +1,10 @@
 name: Ethernet Test Suite
 description: A battery of tests to check the correction functioning of net.eth0
 net_config: conf.d/net_dhcp
-interface: enp6s0
-backend: default
+interface: $$WIRED$$
 tests:
   - name: Check DHCP
-    command: ifconfig enp6s0
+    command: ifconfig $$WIRED$$
     keys:
     - name: status
       type: boolean
