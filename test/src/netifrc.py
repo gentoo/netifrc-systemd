@@ -2,6 +2,7 @@
 
 import configparser
 import os
+import re
 import sys
 import subprocess
 from termcolor import colored
@@ -123,16 +124,30 @@ def test(data, mode):
                     else:
                         backend_value = backend_retrieve(
                             normalize(data['name'], test['name'], key['name']))
-                        try:
-                            assert value == backend_value
-                        except AssertionError:
+
+                        def failure(value, backend_value):
                             print(colored("[ FAIL ]", 'red'))
                             err = "    Backend value {} does not match {}"
                             print(colored(err.format(backend_value, value),
                                           'red'))
                             sys.exit(1)
-                        else:
+
+                        def success(value, backend_value):
                             print(colored("[ PASS ]", 'green'))
+
+                        if(backend_value[0] == 'r'):
+                            match = re.match(backend_value[2:-1], value)
+                            if(match is None):
+                                failure(value, backend_value)
+                            else:
+                                success(value, backend_value)
+                        else:
+                            try:
+                                assert value == backend_value
+                            except AssertionError:
+                                failure(value, backend_value)
+                            else:
+                                success(value, backend_value)
 
 
 for file in sys.argv[1:]:
