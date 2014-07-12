@@ -1,10 +1,10 @@
-
 #!/usr/bin/python3
 
 import configparser
 import os
 import sys
 import subprocess
+from termcolor import colored
 from yaml import load as yamlLoad
 
 try:
@@ -33,7 +33,8 @@ def normalize(*args):
 
 
 def init(data):
-    print("Backing up {}".format(defaults['CONFIG_FILE']))
+    print(colored("Backing up {}".format(defaults['CONFIG_FILE']),
+                  "yellow"))
     try:
         if(os.path.isfile(defaults['CONFIG_FILE'])):
             subprocess.check_call(["mv", defaults['CONFIG_FILE'],
@@ -57,7 +58,8 @@ def init(data):
 
 
 def finalize(data):
-    print("Restoring {}".format(defaults['CONFIG_FILE']))
+    print(colored("Restoring {}".format(defaults['CONFIG_FILE']),
+                  'yellow'))
     try:
         subprocess.check_call(["mv",
                                defaults['CONFIG_FILE_BACKUP'],
@@ -74,18 +76,22 @@ def finalize(data):
 
 
 def test(data, mode):
+    print(colored(data['name'], 'green'))
     for test in data['tests']:
-        print(test['name'])
+        print(colored("  {}: {}".format(test['name'], test['command']),
+                      'green'))
         command = subprocess.Popen(test['command'], stdout=subprocess.PIPE,
                                    shell=True)
         try:
             (out, err) = command.communicate(timeout=int(defaults['TIMEOUT']))
         except subprocess.TimeoutExpired:
-            print("Command {} Expired".format(test['command']))
+            print(colored("Command {} Expired".format(test['command']), 'red'))
             command.kill()
             command.communicate()
         else:
             for key in test['keys']:
+                print(colored("    Extracting {}:".format(key['name']),
+                              'green'), end=" ", flush=True)
                 key_command = subprocess.Popen(key['value'],
                                                stdin=subprocess.PIPE,
                                                stdout=subprocess.PIPE,
@@ -96,8 +102,8 @@ def test(data, mode):
                         timeout=int(defaults['TIMEOUT']))
 
                 except subprocess.TimeoutExpired:
-                    print("Trying to find the value of {} timed out"
-                          .format(key['name']))
+                    print(colored("Trying to find the value of {} timed out"
+                                  .format(key['name']), 'red'))
                     key_command.kill()
                     key_command.communicate()
 
@@ -107,15 +113,26 @@ def test(data, mode):
                     else:
                         value = stdout.decode("utf-8").strip()
 
+                    print(colored(value, 'green'), end=" ", flush=True)
+
                     if(mode == defaults['MODE_MASTER']):
                         backend_save(normalize(data['name'],
                                                test['name'],
                                                key['name']), value)
+                        print()
                     else:
                         backend_value = backend_retrieve(
                             normalize(data['name'], test['name'], key['name']))
-                        print("{} {}".format(value, backend_value))
-                        assert value == backend_value
+                        try:
+                            assert value == backend_value
+                        except AssertionError:
+                            print(colored("[ FAIL ]", 'red'))
+                            err = "    Backend value {} does not match {}"
+                            print(colored(err.format(backend_value, value),
+                                          'red'))
+                            sys.exit(1)
+                        else:
+                            print(colored("[ PASS ]", 'green'))
 
 
 for file in sys.argv[1:]:
