@@ -82,6 +82,18 @@ def finalize(data):
         sys.exit(1)
 
 
+def failure(value, backend_value):
+    print(colored("[ FAIL ]", 'red'))
+    err = "    Backend value {} does not match {}"
+    print(colored(err.format(backend_value, value),
+                  'red'))
+    sys.exit(1)
+
+
+def success(value, backend_value):
+    print(colored("[ PASS ]", 'green'))
+
+
 def test(data, mode):
     print(colored(data['name'], 'green'))
     for test in data['tests']:
@@ -120,6 +132,17 @@ def test(data, mode):
                     else:
                         value = stdout.decode("utf-8").strip()
 
+                    if('match' in key):
+                        if(key['match'][0] == 'r'):
+                            match = re.match(key['match'][2:-1], value)
+                            if(match is None):
+                                failure(value, key['match'])
+                        else:
+                            try:
+                                assert value == key['match']
+                            except AssertionError:
+                                failure(value, key['match'])
+
                     print(colored(value, 'green'), end=" ", flush=True)
 
                     if(mode == defaults['MODE_MASTER']):
@@ -130,16 +153,6 @@ def test(data, mode):
                     else:
                         backend_value = backend_retrieve(
                             normalize(data['name'], test['name'], key['name']))
-
-                        def failure(value, backend_value):
-                            print(colored("[ FAIL ]", 'red'))
-                            err = "    Backend value {} does not match {}"
-                            print(colored(err.format(backend_value, value),
-                                          'red'))
-                            sys.exit(1)
-
-                        def success(value, backend_value):
-                            print(colored("[ PASS ]", 'green'))
 
                         if(backend_value[0] == 'r'):
                             match = re.match(backend_value[2:-1], value)
