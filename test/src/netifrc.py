@@ -47,6 +47,12 @@ def init(data):
 
     with open(BASEDIR + "/" + data['net_config'], 'r') as current_config_file:
         current_config = current_config_file.read()
+        # Replace with the variables defined in SPECS
+        for var in config['SPECS']:
+            current_config = current_config.replace(
+                "$${}$$".format(var.upper()),
+                config['SPECS'][var])
+
     with open(defaults['CONFIG_FILE'], 'w') as config_file:
         config_file.write(current_config)
 
