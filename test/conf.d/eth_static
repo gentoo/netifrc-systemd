@@ -1,1 +1,2 @@
-config_enp6s0="172.27.3.82/21"
+config_$$WIRED$$="172.27.3.82/21"
+routes_$$WIRED$$="default via 172.27.7.254"
