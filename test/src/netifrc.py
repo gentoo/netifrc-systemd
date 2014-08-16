@@ -117,17 +117,26 @@ def success(value, backend_value):
 def test(data, mode):
     print(colored(data['name'], 'green'))
     for test in data['tests']:
-        print(colored("  {}: {}".format(test['name'], test['command']),
-                      'green'))
         command = subprocess.Popen(test['command'], stdout=subprocess.PIPE,
                                    shell=True)
         try:
+            command.wait(float(defaults['TIMEOUT']))
+            if(command.returncode != 0):
+                raise subprocess.CalledProcessError(
+                    command.returncode, test['command'])
             (out, err) = command.communicate(timeout=int(defaults['TIMEOUT']))
+
         except subprocess.TimeoutExpired:
             print(colored("Command {} Expired".format(test['command']), 'red'))
             command.kill()
             command.communicate()
+        except subprocess.CalledProcessError as err:
+            print(colored("  {}: {}".format(test['name'], test['command']),
+                          'red'))
+
         else:
+            print(colored("  {}: {}".format(test['name'], test['command']),
+                          'green'))
             for key in test['keys']:
                 print(colored("    Extracting {}:".format(key['name']),
                               'green'), end=" ", flush=True)
@@ -145,6 +154,8 @@ def test(data, mode):
                                   .format(key['name']), 'red'))
                     key_command.kill()
                     key_command.communicate()
+                except subprocess.CalledProcessError as err:
+                    print(colored("Command failed: " + err.cmd, 'red'))
 
                 else:
                     if('type' in key and key['type'] == "boolean"):
