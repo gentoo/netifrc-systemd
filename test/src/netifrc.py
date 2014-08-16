@@ -6,6 +6,7 @@ import re
 import sys
 import subprocess
 from termcolor import colored
+import time
 from yaml import load as yamlLoad
 
 try:
@@ -80,7 +81,8 @@ def init(data):
     except subprocess.CalledProcessError:
         print("Could not effectively start interface "+data['interface'])
         sys.exit(1)
-
+    else:
+        time.sleep(float(defaults['DELAY']))
 
 def finalize(data):
     print(colored("Restoring {}".format(defaults['CONFIG_FILE']),
