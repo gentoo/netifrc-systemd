@@ -33,6 +33,25 @@ def normalize(*args):
     return '_'.join(''.join(c for c in arg if c.isalnum()) for arg in args)
 
 
+def _service_call(iface, command):
+    if(os.path.exists("/var/run/openrc")):
+        subprocess.check_call(["rc-service", "net."+iface, command])
+    elif(os.path.exists("/run/systemd")):
+        subprocess.check_call(["systemctl", command, "net@"+iface])
+
+
+def stop_iface(iface):
+    _service_call(iface, "stop")
+
+
+def start_iface(iface):
+    _service_call(iface, "start")
+
+
+def restart_iface(iface):
+    _service_call(iface, "restart")
+
+
 def init(data):
     print(colored("Backing up {}".format(defaults['CONFIG_FILE']),
                   "yellow"))
@@ -57,10 +76,9 @@ def init(data):
         config_file.write(current_config)
 
     try:
-        subprocess.check_call(["rc-service", "net."+data['interface'],
-                               "restart"])
+        restart_iface(data['interface'])
     except subprocess.CalledProcessError:
-        print("Could not effectively start process net."+data['interface'])
+        print("Could not effectively start interface "+data['interface'])
         sys.exit(1)
 
 
@@ -76,9 +94,9 @@ def finalize(data):
         sys.exit(1)
 
     try:
-        subprocess.check_call(["rc-service", "net."+data['interface'], "stop"])
+        stop_iface(data['interface'])
     except subprocess.CalledProcessError:
-        print("Could not effectively stop process net." + data['interface'])
+        print("Could not effectively stop interface " + data['interface'])
         sys.exit(1)
 
 
