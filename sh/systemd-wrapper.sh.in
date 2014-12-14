@@ -15,10 +15,8 @@ die() {
   exit -1
 }
 
-while getopts ":s:i:" opt; do
+while getopts ":i:" opt; do
   case $opt in
-	s)
-		RC_SVCNAME=$OPTARG;;
 	i)
 		RC_IFACE=$OPTARG;;
   esac
