@@ -81,12 +81,6 @@ case $1 in
 		stop
 		netifrc_cleanup
 		rc=$?;;
-	restart)
-		stop
-		netifrc_cleanup
-		netifrc_init
-		start
-		rc=$?;;
 	*)
 		die "Unrecognised command $1";;
 esac
