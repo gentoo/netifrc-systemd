@@ -15,21 +15,19 @@ die() {
   exit -1
 }
 
-while getopts ":s:i:p:" opt; do
+while getopts ":s:i:" opt; do
   case $opt in
 	s)
 		RC_SVCNAME=$OPTARG;;
 	i)
 		RC_IFACE=$OPTARG;;
-	p)
-		RC_SVCPREFIX=$OPTARG;;
   esac
 done
 shift $((OPTIND -1))
 
 [ -z "$RC_IFACE" ] && die "Missing Parameter Interface"
 
-: ${RC_SVCPREFIX:="net"}
+RC_SVCPREFIX="net"
 RC_SVCNAME="$RC_SVCPREFIX"."$RC_IFACE"
 RC_UNAME=$(uname)
 # XXX Find out the systemd way of doing this
