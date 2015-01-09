@@ -15,7 +15,7 @@ die() {
   exit -1
 }
 
-while getopts ":i:" opt; do
+while getopts "i:" opt; do
   case $opt in
 	i)
 		RC_IFACE=$OPTARG;;
